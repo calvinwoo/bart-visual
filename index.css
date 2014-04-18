@@ -1,0 +1,15 @@
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 12px;
+}
+
+.diagram {
+  font-weight: 300;
+  font-size: 10px;
+}
+
+.chord path {
+  fill-opacity: .67;
+  stroke: #000;
+  stroke-width: .5px;
+}

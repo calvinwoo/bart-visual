@@ -46,21 +46,79 @@ d3.text("ridership2013/april.csv", function(imports) {
     'WD': 'West Dublin/Pleasanton'
   };
 
+  var countyByCode = {
+    'RM': 'Contra Costa',
+    'EN': 'Contra Costa',
+    'EP': 'Contra Costa',
+    'NB': 'Alameda',
+    'BK': 'Alameda',
+    'AS': 'Alameda',
+    'MA': 'Alameda',
+    '19': 'Alameda',
+    '12': 'Alameda',
+    'LM': 'Alameda',
+    'FV': 'Alameda',
+    'CL': 'Alameda',
+    'SL': 'Alameda',
+    'BF': 'Alameda',
+    'HY': 'Alameda',
+    'SH': 'Alameda',
+    'UC': 'Alameda',
+    'FM': 'Alameda',
+    'CN': 'Contra Costa',
+    'PH': 'Contra Costa',
+    'WC': 'Contra Costa',
+    'LF': 'Contra Costa',
+    'OR': 'Contra Costa',
+    'RR': 'Alameda',
+    'OW': 'Alameda',
+    'EM': 'SF',
+    'MT': 'SF',
+    'PL': 'SF',
+    'CC': 'SF',
+    '16': 'SF',
+    '24': 'SF',
+    'GP': 'SF',
+    'BP': 'SF',
+    'DC': 'San Mateo',
+    'CM': 'San Mateo',
+    'CV': 'Alameda',
+    'ED': 'Alameda',
+    'NC': 'Contra Costa',
+    'WP': 'Contra Costa',
+    'SS': 'San Mateo',
+    'SB': 'San Mateo',
+    'MB': 'San Mateo',
+    'SO': 'San Mateo',
+    'WD': 'Alameda'
+  }
+
+  var colorByCounty = {
+    'Alameda': '#04529C',
+    'Contra Costa': '#FFCC33',
+    'SF': '#E6BE8A',
+    'San Mateo': '#AF1E2C'
+  }
+
   var csv_values = d3.csv.parseRows(imports);
   var matrix = [];
   var codeByIndex = {};
+  var colorByIndex = {};
 	// reading data
   for (var i = 1; i< csv_values.length; i ++){
     matrix[i-1]=[];
     var code = csv_values[i][0];
     codeByIndex[i-1] = code;
+    colorByIndex[i-1] = colorByCounty[ countyByCode[code] ];
     for (var j = 1 ; j < csv_values[i].length; j ++){
       if (!csv_values[i][j]) csv_values[i][j] = 0;
-      var value = csv_values[i][j].toString().replace(',','');
-      matrix[i-1][j-1] = parseFloat(value);
+      var value = parseFloat(csv_values[i][j].toString().replace(',',''));
+      if (value < 0)
+        value = 0
+      matrix[i-1][j-1] = value;
     }
   }
-  console.log(codeByIndex)
+  console.log(colorByIndex)
 
   var chord = d3.layout.chord()
       .padding(.05)
@@ -75,7 +133,7 @@ d3.text("ridership2013/april.csv", function(imports) {
 
   var fill = d3.scale.ordinal()
       .domain(d3.range(44))
-      .range(["#000000", "#FFDD89", "#957244", "#F26223"]);
+      //.range(["#000000", "#FFDD89", "#957244", "#F26223"]);
 
   var svg = d3.select(".diagram").append("svg")
       .attr("width", width)
@@ -87,8 +145,8 @@ d3.text("ridership2013/april.csv", function(imports) {
   svg.append("g").selectAll("path")
       .data(chord.groups)
     .enter().append("path")
-      .style("fill", function(d) { return fill(d.index); })
-      .style("stroke", function(d) { return fill(d.index); })
+      .style("fill", function(d) { return colorByIndex[d.index]; })
+      .style("stroke", function(d) { return colorByIndex[d.index]; })
       .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
       .on("mouseover", fade(.1))
       .on("mouseout", fade(1));
@@ -153,7 +211,8 @@ d3.text("ridership2013/april.csv", function(imports) {
       .data(chord.chords)
     .enter().append("path")
       .attr("d", d3.svg.chord().radius(innerRadius))
-      .style("fill", function(d) { return fill(d.target.index); })
+      .style("fill", function(d) { return colorByIndex[d.target.index]; })
+      .style("stroke", function(d) { return colorByIndex[d.target.index]; })
       .style("opacity", 1);
 
 

@@ -1,11 +1,11 @@
 body {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
   font-size: 12px;
 }
 
 .diagram {
   font-weight: 300;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .chord path {

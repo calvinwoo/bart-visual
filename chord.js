@@ -118,7 +118,6 @@ d3.text("ridership2013/april.csv", function(imports) {
       matrix[i-1][j-1] = value;
     }
   }
-  console.log(colorByIndex)
 
   var chord = d3.layout.chord()
       .padding(.05)
